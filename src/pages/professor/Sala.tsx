@@ -2,8 +2,8 @@ import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { Layout } from "@/components/layout";
 import { Toast } from "@/components/toast";
-import { Users, Timer, Trophy, Play, Copy, ArrowLeft } from "lucide-react";
-import { getRoom } from "@/api/sala";
+import { Users, Timer, Trophy, Copy, ArrowLeft, X } from "lucide-react";
+import { getRoom, removeStudent } from "@/api/sala";
 
 export const QuizRoom: React.FC = () => {
   const { codigo } = useParams<{ codigo: string }>();
@@ -21,26 +21,26 @@ export const QuizRoom: React.FC = () => {
     alunosLista: [] as Array<{ nome: string; score: number }>,
   });
 
+  const fetchSala = async () => {
+    try {
+      const sala = await getRoom(codigo!);
+
+      setSalaInfo({
+        titulo: sala.titulo,
+        nivel: sala.nivel,
+        quantidade: sala.quantidadeQuestoes,
+        tempo: sala.tempoPorQuestao,
+        jogadoresConectados: sala.alunos ? sala.alunos.length : 0,
+        alunosLista: sala.alunos || [],
+      });
+    } catch (error: any) {
+      setToastMessage(error.message || "Erro ao carregar dados da sala.");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   useEffect(() => {
-    const fetchSala = async () => {
-      try {
-        const sala = await getRoom(codigo!);
-
-        setSalaInfo({
-          titulo: sala.titulo,
-          nivel: sala.nivel,
-          quantidade: sala.quantidadeQuestoes,
-          tempo: sala.tempoPorQuestao,
-          jogadoresConectados: sala.alunos ? sala.alunos.length : 0,
-          alunosLista: sala.alunos || [],
-        });
-      } catch (error: any) {
-        setToastMessage(error.message || "Erro ao carregar dados da sala.");
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
     if (codigo) {
       fetchSala();
 
@@ -61,6 +61,18 @@ export const QuizRoom: React.FC = () => {
 
   const handleVoltar = () => {
     navigate("/professor/dashboard");
+  };
+
+  const handleRemoverAluno = async (alunoNome: string) => {
+    if (!codigo) return;
+
+    try {
+      await removeStudent(codigo, alunoNome);
+      setToastMessage(`Aluno ${alunoNome} removido com sucesso.`);
+      fetchSala();
+    } catch (error: any) {
+      setToastMessage(error.message || "Erro ao tentar remover o aluno.");
+    }
   };
 
   return (
@@ -146,12 +158,21 @@ export const QuizRoom: React.FC = () => {
                   {salaInfo.alunosLista.map((aluno, index) => (
                     <div
                       key={index}
-                      className="flex items-center gap-3 bg-white/5 border border-white/10 rounded-2xl p-4 text-white font-bold"
+                      className="flex items-center justify-between bg-white/5 border border-white/10 rounded-2xl p-4 text-white font-bold group"
                     >
-                      <div className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center text-xs text-white/70">
-                        {index + 1}
+                      <div className="flex items-center gap-3 min-w-0">
+                        <div className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center text-xs text-white/70 shrink-0">
+                          {index + 1}
+                        </div>
+                        <span className="truncate text-lg">{aluno.nome}</span>
                       </div>
-                      <span className="truncate text-lg">{aluno.nome}</span>
+                      <button
+                        type="button"
+                        onClick={() => handleRemoverAluno(aluno.nome)}
+                        className="p-2 hover:bg-red-500/20 text-white/40 hover:text-red-400 rounded-xl transition-colors shrink-0"
+                      >
+                        <X className="w-5 h-5" />
+                      </button>
                     </div>
                   ))}
                 </div>

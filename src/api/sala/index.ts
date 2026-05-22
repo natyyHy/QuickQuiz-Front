@@ -63,13 +63,10 @@ export const createRoom = async (roomData: CreateRoomData): Promise<any> => {
 };
 
 export const getRoom = async (codigo: string): Promise<any> => {
-  const token = localStorage.getItem("@App:token");
-
   const res = await fetch(`${BASE_URL}/sala/${codigo}`, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
     },
   });
 
@@ -92,6 +89,24 @@ export const enterRoomAsStudent = async (
   });
 
   if (!res.ok) await handleError(res, "Erro ao tentar entrar na sala.");
+
+  return await res.json();
+};
+
+export const removeStudent = async (
+  codigo: string,
+  alunoNome: string,
+): Promise<any> => {
+  const alunoUrlSafe = encodeURIComponent(alunoNome);
+
+  const res = await fetch(`${BASE_URL}/sala/${codigo}/aluno/${alunoUrlSafe}`, {
+    method: "DELETE",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+
+  if (!res.ok) await handleError(res, "Erro ao tentar remover o aluno.");
 
   return await res.json();
 };

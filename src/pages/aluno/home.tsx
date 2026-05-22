@@ -46,6 +46,8 @@ const Home: React.FC = () => {
         studentName.trim(),
       );
 
+      localStorage.setItem("nome_aluno", alunoInfo.nome);
+
       showToast(
         `Bem-vindo(a), ${alunoInfo.nome}! Entrando na sala...`,
         "success",
@@ -129,7 +131,7 @@ const Home: React.FC = () => {
               onClick={() => navigate("/")}
               className="text-[#605BEF] hover:underline text-sm font-medium"
             >
-              ← Voltar para início
+              &larr; Voltar para início
             </button>
           </div>
         </div>
