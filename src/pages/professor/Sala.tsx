@@ -52,6 +52,16 @@ export const QuizRoom: React.FC = () => {
     }
   }, [codigo]);
 
+  useEffect(() => {
+    if (toastMessage) {
+      const timer = setTimeout(() => {
+        setToastMessage(null);
+      }, 3000);
+
+      return () => clearTimeout(timer);
+    }
+  }, [toastMessage]);
+
   const copiarCodigo = () => {
     if (codigo) {
       navigator.clipboard.writeText(codigo);
