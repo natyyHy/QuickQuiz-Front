@@ -5,7 +5,7 @@ import { Github, Linkedin, Mail, ArrowLeft } from "lucide-react";
 
 const developers = [
   {
-    name: "Desenvolvedor 1",
+    name: "Thalisson Moura",
     role: "Full Stack Developer",
     description:
       "Responsável pelo desenvolvimento da arquitetura e integração do sistema.",
@@ -15,7 +15,7 @@ const developers = [
     avatarUrl: "https://github.com/Thalis78.png",
   },
   {
-    name: "Desenvolvedor 2",
+    name: "Kaio Gabriel",
     role: "Frontend Developer",
     description: "Especialista em criar interfaces intuitivas e responsivas.",
     email: "kkaiogabrielk@gmail.com",
@@ -24,7 +24,7 @@ const developers = [
     avatarUrl: "https://github.com/KaioGabriel-the.png",
   },
   {
-    name: "Desenvolvedor 3",
+    name: "Natiele Grazielly",
     role: "UI/UX Designer",
     description:
       "Focado na experiência do usuário e na estética visual do projeto.",
@@ -34,7 +34,7 @@ const developers = [
     avatarUrl: "https://github.com/natyyHy.png",
   },
   {
-    name: "Desenvolvedor 4",
+    name: "Lucas Morais",
     role: "Backend Developer",
     description:
       "Responsável pela lógica de negócio e gerenciamento de banco de dados.",
