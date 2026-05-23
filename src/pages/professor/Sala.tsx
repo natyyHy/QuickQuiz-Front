@@ -3,13 +3,14 @@ import { useParams, useNavigate } from "react-router-dom";
 import { Layout } from "@/components/layout";
 import { Toast } from "@/components/toast";
 import { Users, Timer, Trophy, Copy, ArrowLeft, X } from "lucide-react";
-import { getRoom, removeStudent } from "@/api/sala";
+import { getRoom, removeStudent, iniciarSala } from "@/api/sala";
 
 export const QuizRoom: React.FC = () => {
   const { codigo } = useParams<{ codigo: string }>();
   const navigate = useNavigate();
 
   const [isLoading, setIsLoading] = useState(true);
+  const [isStarting, setIsStarting] = useState(false);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
 
   const [salaInfo, setSalaInfo] = useState({
@@ -82,6 +83,22 @@ export const QuizRoom: React.FC = () => {
       fetchSala();
     } catch (error: any) {
       setToastMessage(error.message || "Erro ao tentar remover o aluno.");
+    }
+  };
+
+  const handleIniciarSala = async () => {
+    if (!codigo) return;
+
+    try {
+      setIsStarting(true);
+      await iniciarSala(codigo);
+      setToastMessage("Sala iniciada com sucesso!");
+
+      navigate(`/professor/quiz/sala/pontuacao/${codigo}`);
+    } catch (error: any) {
+      setToastMessage(error.message || "Erro ao tentar iniciar a sala.");
+    } finally {
+      setIsStarting(false);
     }
   };
 
@@ -208,10 +225,13 @@ export const QuizRoom: React.FC = () => {
             </div>
 
             <button
-              disabled={isLoading || salaInfo.alunosLista.length === 0}
+              onClick={handleIniciarSala}
+              disabled={
+                isLoading || isStarting || salaInfo.alunosLista.length === 0
+              }
               className="w-full flex items-center justify-center gap-3 bg-green-500 text-white py-7 rounded-[2.5rem] font-black text-2xl shadow-[0_12px_0_rgb(21,128,61)] hover:shadow-[0_6px_0_rgb(21,128,61)] hover:translate-y-[6px] transition-all active:translate-y-[12px] active:shadow-none disabled:opacity-50 disabled:grayscale disabled:cursor-not-allowed disabled:translate-y-0"
             >
-              INICIAR AGORA
+              {isStarting ? "INICIANDO..." : "INICIAR AGORA"}
             </button>
           </div>
         </div>
