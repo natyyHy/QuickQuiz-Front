@@ -32,6 +32,12 @@ export const StudentWaitRoom: React.FC = () => {
     try {
       const sala = await getRoom(codigo);
 
+      if (sala.started === true) {
+        localStorage.setItem("@App:sala_atual", JSON.stringify(sala));
+        navigate("/aluno/quiz/questoes");
+        return;
+      }
+
       const aindaNaSala = sala.alunos?.some(
         (aluno: any) => aluno.nome === meuNome,
       );

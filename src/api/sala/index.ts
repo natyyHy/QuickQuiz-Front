@@ -110,3 +110,42 @@ export const removeStudent = async (
 
   return await res.json();
 };
+
+export const iniciarSala = async (codigo: string): Promise<any> => {
+  const token = localStorage.getItem("@App:token");
+
+  const res = await fetch(`${BASE_URL}/sala/${codigo}/iniciar`, {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  if (!res.ok) await handleError(res, "Erro ao tentar iniciar a sala.");
+
+  return await res.json();
+};
+
+export const atualizarPontuacao = async (
+  codigo: string,
+  alunoNome: string,
+  pontuacao: number,
+): Promise<any> => {
+  const alunoUrlSafe = encodeURIComponent(alunoNome);
+
+  const res = await fetch(`${BASE_URL}/sala/${codigo}/aluno/${alunoUrlSafe}`, {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ pontuacao }),
+  });
+
+  console.log(res.body);
+
+  console.log(res);
+  if (!res.ok) await handleError(res, "Erro ao tentar atualizar a pontuação.");
+
+  return await res.json();
+};
