@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Eye, EyeOff } from "lucide-react";
+import { ArrowLeft, Eye, EyeOff } from "lucide-react";
 import { Toast } from "@/components/toast";
 import { Layout } from "@/components/layout";
 import { getEmailSuggestions } from "@/utils/apiUtils";
@@ -72,13 +72,30 @@ export const ProfessorLogin: React.FC = () => {
       />
 
       <main className="flex flex-col items-center justify-center px-4 pt-32 pb-12">
-        <div className="w-full max-w-md bg-gray-50 rounded-2xl p-8 border-4 border-[#4441AA] shadow-2xl">
+        <div className="w-full max-w-md bg-[#3E3B7A] rounded-2xl p-8 border-4 border-[#3E3B7A] shadow-2xl">
           <div className="flex flex-col items-center mb-8">
-            <img src="/Logo.svg" width="150px" alt="Logo" className="mb-4" />
-            <h2 className="text-3xl font-bold text-[#605BEF] text-center mb-2">
-              Login do Professor
+            <div className="mt-6 text-left w-full">
+              <button
+                onClick={() => navigate("/")}
+                className="flex items-center gap-1.5 px-3 py-1.5 bg-white/5 border border-white/10 text-white/80 rounded-lg text-sm font-medium hover:bg-white/15 hover:text-white transition duration-200 backdrop-blur-sm group"
+              >
+                <ArrowLeft
+                  size={14}
+                  className="group-hover:-translate-x-0.5 transition-transform"
+                />
+                Voltar
+              </button>
+            </div>
+            <img
+              src="https://api.builder.io/api/v1/image/assets/TEMP/ef263a52258bbe9a374560e02155169f1fceebf7?width=290"
+              width="150px"
+              alt="Logo"
+              className="mb-4"
+            />
+            <h2 className="text-4xl font-black text-white text-center tracking-tight drop-shadow-md mb-2">
+              Acesso do Professor
             </h2>
-            <p className="text-gray-600 text-center text-sm">
+            <p className="text-white/80 text-center text-sm">
               Acesse sua conta para gerenciar quizzes
             </p>
           </div>
@@ -87,7 +104,7 @@ export const ProfessorLogin: React.FC = () => {
             <div className="relative">
               <label
                 htmlFor="email"
-                className="block text-sm font-medium text-gray-700 mb-2"
+                className="text-2xl font-black text-white tracking-tight drop-shadow-md mb-2 block"
               >
                 Email
               </label>
@@ -96,7 +113,7 @@ export const ProfessorLogin: React.FC = () => {
                 type="email"
                 value={email}
                 onChange={(e) => handleEmailChange(e.target.value)}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#605BEF] focus:border-transparent outline-none transition"
+                className="w-full px-4 py-3 rounded-lg bg-white text-gray-800 placeholder-gray-400 font-medium focus:outline-none focus:ring-2 focus:ring-[#605BEF] transition-all"
                 placeholder="seu.email@exemplo.com"
                 required
                 autoComplete="off"
@@ -108,7 +125,7 @@ export const ProfessorLogin: React.FC = () => {
                     <li
                       key={index}
                       onClick={() => handleSelectSuggestion(suggestion)}
-                      className="px-4 py-3 text-sm text-gray-700 hover:bg-[#605BEF] hover:text-white cursor-pointer transition-colors border-b last:border-b-0 border-gray-100"
+                      className="px-4 py-3 text-sm text-gray-800 hover:bg-[#605BEF] hover:text-white cursor-pointer transition-colors border-b last:border-b-0 border-gray-100"
                     >
                       {suggestion}
                     </li>
@@ -120,24 +137,24 @@ export const ProfessorLogin: React.FC = () => {
             <div>
               <label
                 htmlFor="password"
-                className="block text-sm font-medium text-gray-700 mb-2"
+                className="text-2xl font-black text-white tracking-tight drop-shadow-md mb-2 block"
               >
                 Senha
               </label>
-              <div className="relative">
+              <div className="relative mb-10">
                 <input
                   id="password"
                   type={showPassword ? "text" : "password"}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="w-full px-4 py-3 pr-12 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#605BEF] focus:border-transparent outline-none transition"
+                  className="w-full px-4 py-3 pr-12 rounded-lg bg-white text-gray-800 placeholder-gray-400 font-medium focus:outline-none focus:ring-2 focus:ring-[#605BEF] transition-all"
                   placeholder="••••••••"
                   required
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700 focus:outline-none"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-[#] focus:outline-none"
                 >
                   {showPassword ? (
                     <EyeOff className="h-5 w-5" />
@@ -151,20 +168,11 @@ export const ProfessorLogin: React.FC = () => {
             <button
               type="submit"
               disabled={isLoading}
-              className="w-full bg-[#605BEF] text-white py-3 rounded-lg font-semibold hover:bg-[#4f4bd9] transition duration-200 disabled:opacity-50 disabled:cursor-not-allowed shadow-md"
+              className="w-full mt-10 px-4 py-3 bg-gradient-to-r from-[#605BEF] to-[#605BEF] text-white font-bold rounded-lg hover:from-[#4441AA] hover:to-[#3a35a8] transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 uppercase tracking-wider text-lg shadow-lg hover:shadow-xl transform hover:scale-105"
             >
               {isLoading ? "Entrando..." : "Entrar"}
             </button>
           </form>
-
-          <div className="mt-6 text-center">
-            <button
-              onClick={() => navigate("/")}
-              className="text-[#605BEF] hover:underline text-sm font-medium"
-            >
-              ← Voltar para início
-            </button>
-          </div>
         </div>
       </main>
     </Layout>

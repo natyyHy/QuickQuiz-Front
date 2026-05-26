@@ -39,22 +39,19 @@ export const ProfessorDashboard: React.FC = () => {
 
       <main className="px-4 pt-32 pb-12">
         <div className="max-w-6xl mx-auto">
-          <div className="bg-white rounded-2xl shadow-xl p-8 mb-8 border-4 border-[#4441AA]">
+          <div className="bg-[#3E3B7A] rounded-2xl shadow-xl p-8 mb-8 border-4 border-[#3E3B7A]/20">
             <div className="flex justify-between items-center mb-6">
               <div>
-                <h1 className="text-3xl font-bold text-[#605BEF] mb-2">
-                  Dashboard do Professor
+                <h1 className="text-4xl font-black text-white tracking-tight drop-shadow-md">
+                  Bem-vindo, Professor(a) Ciel!
                 </h1>
-                <p className="text-[#605BEF] font-bold text-lg">
-                  Bem-vindo, Professor(a)!
-                </p>
-                <p className="text-[#605BEF] font-semibold opacity-80">
+                <p className="text-[#FFFFFF] font-semibold opacity-80">
                   Gerencie seus quizzes aqui.
                 </p>
               </div>
               <button
                 onClick={handleLogout}
-                className="px-6 py-2 border-2 border-[#ee8697] text-[#ee8697] rounded-lg font-semibold hover:bg-[#ee8697] hover:text-white transition duration-200"
+                className="px-6 py-2 bg-[#ee8697] border-2 border-[#ee8697] text-[#FFFFFF] rounded-lg font-semibold hover:bg-[#d47080] border-[#d47080] hover:text-white transition duration-200"
               >
                 Sair
               </button>
@@ -62,9 +59,9 @@ export const ProfessorDashboard: React.FC = () => {
 
             <button
               onClick={() => navigate("/professor/quiz/gerar-quiz")}
-              className="w-full sm:w-auto bg-[#FFC000] text-[#605BEF] px-8 py-4 rounded-xl font-bold text-lg hover:bg-[#ffb800] transition duration-200 shadow-lg hover:shadow-xl transform hover:scale-105"
+              className="w-full sm:w-auto bg-[#605BEF] text-[#FFFFFF] px-8 py-4 rounded-xl font-bold text-lg hover:bg-[#4441AA] transition duration-200 shadow-lg hover:shadow-xl transform hover:scale-105"
             >
-              Gerar Novo Quiz
+              Criar Quizz
             </button>
           </div>
         </div>
