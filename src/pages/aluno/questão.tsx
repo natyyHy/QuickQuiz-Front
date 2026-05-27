@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Layout } from "@/components/layout";
 import { Toast } from "@/components/toast";
-import { Timer, ArrowRight, CheckCircle, XCircle } from "lucide-react";
+import { Timer, CheckCircle, XCircle, Loader2 } from "lucide-react";
 import { getRoom, atualizarPontuacao } from "@/api/sala";
 
 interface Questao {
@@ -36,7 +36,6 @@ export const QuizQuestions: React.FC = () => {
   const meuNome = localStorage.getItem("nome_aluno") || "";
 
   const [salaId] = useState<string>(quizInicial?.codigo || "");
-  const [tituloQuiz] = useState<string>(quizInicial?.titulo || "Quiz");
   const [questoesLista] = useState<Questao[]>(quizInicial?.questoes || []);
 
   const [indexQuestaoAtual, setIndexQuestaoAtual] = useState(
@@ -56,10 +55,10 @@ export const QuizQuestions: React.FC = () => {
 
   const [pontuacaoTotal, setPontuacaoTotal] = useState(0);
   const [quizFinalizado, setQuizFinalizado] = useState(false);
+  const [aguardandoProxima, setAguardandoProxima] = useState(false);
 
   useEffect(() => {
     if (quizFinalizado && salaId) {
-      localStorage.removeItem("@App:sala_atual");
       navigate(`/professor/quiz/sala/pontuacao/${salaId}`);
     }
   }, [quizFinalizado, salaId, navigate]);
@@ -67,20 +66,9 @@ export const QuizQuestions: React.FC = () => {
   useEffect(() => {
     if (!salaId || quizFinalizado) return;
 
-    const checarProgressoSala = async () => {
+    const checarStatusSala = async () => {
       try {
         const salaAtualizada = await getRoom(salaId);
-
-        if (
-          salaAtualizada.indexQuestaoAtual !== undefined &&
-          salaAtualizada.indexQuestaoAtual !== indexQuestaoAtual
-        ) {
-          setIndexQuestaoAtual(salaAtualizada.indexQuestaoAtual);
-          setTempo(salaAtualizada.tempoPorQuestao || 30);
-          setTempoTotalQuestao(salaAtualizada.tempoPorQuestao || 30);
-          setSelecionada(null);
-          setRespondido(false);
-        }
 
         if (
           salaAtualizada.status === "finalizado" ||
@@ -89,16 +77,17 @@ export const QuizQuestions: React.FC = () => {
           setQuizFinalizado(true);
         }
       } catch (error) {
-        console.error("Erro ao sincronizar dados da sala simultânea:", error);
+        console.error("Erro ao sincronizar status da sala:", error);
       }
     };
 
-    const interval = setInterval(checarProgressoSala, 2000);
+    const interval = setInterval(checarStatusSala, 2000);
     return () => clearInterval(interval);
-  }, [salaId, indexQuestaoAtual, quizFinalizado]);
+  }, [salaId, quizFinalizado]);
 
   useEffect(() => {
-    if (quizFinalizado || questoesLista.length === 0) return;
+    if (quizFinalizado || questoesLista.length === 0 || aguardandoProxima)
+      return;
 
     if (tempo > 0 && !respondido) {
       const timer = setInterval(() => setTempo((prev) => prev - 1), 1000);
@@ -107,8 +96,9 @@ export const QuizQuestions: React.FC = () => {
       setRespondido(true);
       setToastVariant("error");
       setToastMessage("Tempo esgotado!");
+      handleAvancoAutomatico();
     }
-  }, [tempo, respondido, quizFinalizado, questoesLista]);
+  }, [tempo, respondido, quizFinalizado, questoesLista, aguardandoProxima]);
 
   useEffect(() => {
     if (toastMessage) {
@@ -140,8 +130,37 @@ export const QuizQuestions: React.FC = () => {
     return 1;
   };
 
+  const handleAvancoAutomatico = () => {
+    setAguardandoProxima(true);
+
+    setTimeout(() => {
+      setToastMessage(null);
+      if (indexQuestaoAtual + 1 < questoesLista.length) {
+        setIndexQuestaoAtual((prev) => {
+          const novoIndex = prev + 1;
+
+          if (quizInicial) {
+            quizInicial.indexQuestaoAtual = novoIndex;
+            localStorage.setItem(
+              "@App:sala_atual",
+              JSON.stringify(quizInicial),
+            );
+          }
+
+          return novoIndex;
+        });
+        setTempo(tempoTotalQuestao);
+        setSelecionada(null);
+        setRespondido(false);
+        setAguardandoProxima(false);
+      } else {
+        setQuizFinalizado(true);
+      }
+    }, 3000);
+  };
+
   const handleResponder = async (chave: string) => {
-    if (respondido || quizFinalizado) return;
+    if (respondido || quizFinalizado || aguardandoProxima) return;
     setSelecionada(chave);
     setRespondido(true);
 
@@ -154,10 +173,9 @@ export const QuizQuestions: React.FC = () => {
 
       setPontuacaoTotal(novaPontuacaoTotal);
       setToastVariant("success");
-      setToastMessage(`Correto! +${pontosGanhos} pontos por agilidade.`);
+      setToastMessage(`Correto!`);
 
       try {
-        console.log(novaPontuacaoTotal);
         await atualizarPontuacao(salaId, meuNome, novaPontuacaoTotal);
       } catch (error: any) {
         console.error(
@@ -169,18 +187,8 @@ export const QuizQuestions: React.FC = () => {
       setToastVariant("error");
       setToastMessage("Resposta incorreta!");
     }
-  };
 
-  const handleProximaLocal = () => {
-    setToastMessage(null);
-    if (indexQuestaoAtual + 1 < questoesLista.length) {
-      setIndexQuestaoAtual((prev) => prev + 1);
-      setTempo(tempoTotalQuestao);
-      setSelecionada(null);
-      setRespondido(false);
-    } else {
-      setQuizFinalizado(true);
-    }
+    handleAvancoAutomatico();
   };
 
   return (
@@ -236,7 +244,7 @@ export const QuizQuestions: React.FC = () => {
               let cardStyle =
                 "bg-white/5 border-white/10 text-white hover:bg-white/10 active:scale-[0.99]";
 
-              if (respondido) {
+              if (respondido || aguardandoProxima) {
                 if (isCorrect) {
                   cardStyle = "bg-green-500/20 border-green-500 text-green-300";
                 } else if (isSelected && !isCorrect) {
@@ -250,7 +258,7 @@ export const QuizQuestions: React.FC = () => {
               return (
                 <button
                   key={key}
-                  disabled={respondido}
+                  disabled={respondido || aguardandoProxima}
                   onClick={() => handleResponder(key)}
                   className={`flex items-center justify-between border-2 rounded-xl md:rounded-2xl p-4 md:p-6 text-left font-bold text-base md:text-lg transition-all gap-4 min-w-0 w-full ${cardStyle}`}
                 >
@@ -263,30 +271,23 @@ export const QuizQuestions: React.FC = () => {
                     </span>
                   </div>
 
-                  {respondido && isCorrect && (
+                  {(respondido || aguardandoProxima) && isCorrect && (
                     <CheckCircle className="w-5 h-5 md:w-6 md:h-6 text-green-400 shrink-0" />
                   )}
-                  {respondido && isSelected && !isCorrect && (
-                    <XCircle className="w-5 h-5 md:w-6 md:h-6 text-red-400 shrink-0" />
-                  )}
+                  {(respondido || aguardandoProxima) &&
+                    isSelected &&
+                    !isCorrect && (
+                      <XCircle className="w-5 h-5 md:w-6 md:h-6 text-red-400 shrink-0" />
+                    )}
                 </button>
               );
             })}
           </div>
 
-          {respondido && (
-            <div className="flex justify-end pt-2">
-              <button
-                onClick={handleProximaLocal}
-                className="w-full sm:w-auto flex items-center justify-center gap-2 bg-green-500 text-white px-8 py-4 rounded-xl md:rounded-2xl font-black text-base md:text-lg hover:bg-green-600 transition-all active:scale-95 shadow-lg"
-              >
-                <span>
-                  {indexQuestaoAtual + 1 === questoesLista.length
-                    ? "Finalizar"
-                    : "Avançar"}
-                </span>
-                <ArrowRight className="w-5 h-5" />
-              </button>
+          {aguardandoProxima && (
+            <div className="flex items-center justify-center gap-3 bg-white/5 border border-white/10 p-4 rounded-xl md:rounded-2xl text-white/80 font-bold text-center animate-fade-in mt-4">
+              <Loader2 className="w-5 h-5 animate-spin text-blue-400" />
+              <span>Indo para a próxima questão...</span>
             </div>
           )}
         </div>

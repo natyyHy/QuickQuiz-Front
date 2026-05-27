@@ -1,5 +1,5 @@
 import { Routes, Route } from "react-router-dom";
-import { ProtectedRoute } from "@/utils/ProtectedRoute";
+import { ProtectedRoute, PublicRoute } from "@/utils/ProtectedRoute";
 
 import Index from "./pages/Index";
 import { CreateQuizStep1 } from "./pages/professor/gerarQuiz";
@@ -16,17 +16,32 @@ import { QuizScores } from "./pages/professor/salaPontuacao";
 export const AppRoutes = () => {
   return (
     <Routes>
-      <Route path="/" element={<Index />} />
-      <Route path="/professor/login" element={<ProfessorLogin />} />
+      <Route
+        path="/"
+        element={
+          <PublicRoute>
+            <Index />
+          </PublicRoute>
+        }
+      />
+      <Route
+        path="/professor/login"
+        element={
+          <PublicRoute>
+            <ProfessorLogin />
+          </PublicRoute>
+        }
+      />
+
       <Route path="/sobre/ciel" element={<AboutSection />} />
+      <Route path="/desenvolvedores" element={<Desenvolvedores />} />
+
       <Route path="/aluno/home" element={<Home />} />
       <Route
         path="/aluno/quiz/sala/espera/:codigo"
         element={<StudentWaitRoom />}
       />
       <Route path="/aluno/quiz/questoes" element={<QuizQuestions />} />
-
-      <Route path="/desenvolvedores" element={<Desenvolvedores />} />
 
       <Route
         path="/professor/quiz/sala/pontuacao/:codigo"
