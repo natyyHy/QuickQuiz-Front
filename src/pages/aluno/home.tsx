@@ -124,7 +124,7 @@ const Home: React.FC = () => {
               </label>
               <input
                 type="text"
-                placeholder="Ex: QUIZ2024"
+                placeholder="Ex: 1234"
                 value={quizCode}
                 onChange={(e) => setQuizCode(e.target.value.toUpperCase())}
                 disabled={isLoading}
