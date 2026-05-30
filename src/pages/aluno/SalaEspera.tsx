@@ -100,68 +100,70 @@ export const StudentWaitRoom: React.FC = () => {
         onClose={() => setToastMessage(null)}
       />
 
-      <div className="flex flex-col items-center px-4 py-20 min-h-[calc(100vh-80px)]">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 w-full max-w-4xl">
+      <div className="flex flex-col items-center px-4 py-8 md:py-20 min-h-[calc(100vh-80px)] w-full max-w-4xl mx-auto">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 md:gap-8 w-full">
           <div className="lg:col-span-2 space-y-6">
-            <div className="bg-[#3E3B7A] rounded-[2.5rem] p-10 border border-white/10 shadow-2xl">
-              <h2 className="text-white/50 font-bold uppercase text-xs tracking-[0.2em] mb-3">
+            <div className="bg-[#3E3B7A] rounded-2xl md:rounded-[2.5rem] p-5 sm:p-8 md:p-10 border border-white/10 shadow-2xl">
+              <h2 className="text-white/50 font-bold uppercase text-[10px] md:text-xs tracking-[0.2em] mb-2">
                 Você entrou no Quiz
               </h2>
-              <h1 className="text-3xl md:text-5xl font-black text-white mb-8 leading-tight">
+              <h1 className="text-2xl md:text-4xl lg:text-5xl font-black text-white mb-6 md:mb-8 leading-tight break-words">
                 {isLoading ? "..." : salaInfo.titulo}
               </h1>
 
-              <div className="grid grid-cols-3 gap-4">
-                <div className="bg-white/5 rounded-2xl p-5 border border-white/5 text-center">
-                  <Trophy className="w-6 h-6 text-yellow-400 mx-auto mb-2" />
-                  <span className="block text-white font-black text-xl">
+              <div className="grid grid-cols-3 gap-2.5 sm:gap-4">
+                <div className="bg-white/5 rounded-xl md:rounded-2xl p-3 sm:p-5 border border-white/5 text-center min-w-0">
+                  <Trophy className="w-5 h-5 md:w-6 md:h-6 text-yellow-400 mx-auto mb-1.5" />
+                  <span className="block text-white font-black text-base md:text-xl truncate">
                     {salaInfo.nivel}
                   </span>
-                  <span className="text-white/40 text-[10px] font-bold uppercase tracking-widest">
+                  <span className="text-white/40 text-[9px] md:text-[10px] font-bold uppercase tracking-widest block truncate">
                     Nível
                   </span>
                 </div>
-                <div className="bg-white/5 rounded-2xl p-5 border border-white/5 text-center">
-                  <Timer className="w-6 h-6 text-blue-400 mx-auto mb-2" />
-                  <span className="block text-white font-black text-xl">
+
+                <div className="bg-white/5 rounded-xl md:rounded-2xl p-3 sm:p-5 border border-white/5 text-center min-w-0">
+                  <Timer className="w-5 h-5 md:w-6 md:h-6 text-blue-400 mx-auto mb-1.5" />
+                  <span className="block text-white font-black text-base md:text-xl truncate">
                     {salaInfo.tempo}s
                   </span>
-                  <span className="text-white/40 text-[10px] font-bold uppercase tracking-widest">
+                  <span className="text-white/40 text-[9px] md:text-[10px] font-bold uppercase tracking-widest block truncate">
                     Tempo
                   </span>
                 </div>
-                <div className="bg-white/5 rounded-2xl p-5 border border-white/5 text-center">
-                  <Users className="w-6 h-6 text-green-400 mx-auto mb-2" />
-                  <span className="block text-white font-black text-xl">
+
+                <div className="bg-white/5 rounded-xl md:rounded-2xl p-3 sm:p-5 border border-white/5 text-center min-w-0">
+                  <Users className="w-5 h-5 md:w-6 md:h-6 text-green-400 mx-auto mb-1.5" />
+                  <span className="block text-white font-black text-base md:text-xl truncate">
                     {salaInfo.jogadoresConectados}
                   </span>
-                  <span className="text-white/40 text-[10px] font-bold uppercase tracking-widest">
+                  <span className="text-white/40 text-[9px] md:text-[10px] font-bold uppercase tracking-widest block truncate">
                     Alunos
                   </span>
                 </div>
               </div>
             </div>
 
-            <div className="bg-[#3E3B7A] rounded-[2.5rem] p-10 border border-white/10 shadow-2xl">
-              <h3 className="text-white font-black text-2xl mb-6 text-center sm:text-left">
+            <div className="bg-[#3E3B7A] rounded-2xl md:rounded-[2.5rem] p-5 sm:p-8 md:p-10 border border-white/10 shadow-2xl">
+              <h3 className="text-white font-black text-xl md:text-2xl mb-4 md:mb-6 text-center sm:text-left">
                 Jogadores na Sala
               </h3>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 max-h-[300px] overflow-y-auto pr-2">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 max-h-[260px] overflow-y-auto pr-1">
                 {salaInfo.alunosLista.map((aluno, index) => (
                   <div
                     key={index}
-                    className={`flex items-center justify-between border rounded-2xl p-4 text-white font-bold ${
+                    className={`flex items-center justify-between border rounded-xl p-3.5 text-white font-bold min-w-0 ${
                       aluno.nome === meuNome
                         ? "bg-green-500/10 border-green-500"
                         : "bg-white/5 border-white/10"
                     }`}
                   >
-                    <div className="flex items-center gap-3 min-w-0">
-                      <div className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center text-xs text-white/70 shrink-0">
+                    <div className="flex items-center gap-3 min-w-0 w-full">
+                      <div className="w-7 h-7 rounded-full bg-white/10 flex items-center justify-center text-xs text-white/70 shrink-0">
                         {index + 1}
                       </div>
-                      <span className="truncate text-lg">
+                      <span className="truncate text-base md:text-lg w-full">
                         {aluno.nome} {aluno.nome === meuNome && "(Você)"}
                       </span>
                     </div>
@@ -172,12 +174,12 @@ export const StudentWaitRoom: React.FC = () => {
           </div>
 
           <div className="space-y-6">
-            <div className="bg-white rounded-[2.5rem] p-10 shadow-2xl flex flex-col items-center text-center justify-center min-h-[300px]">
-              <Loader2 className="w-12 h-12 text-[#3E3B7A] animate-spin mb-6" />
-              <span className="text-[#3E3B7A] font-black text-2xl mb-2">
+            <div className="bg-white rounded-2xl md:rounded-[2.5rem] p-6 sm:p-8 md:p-10 shadow-2xl flex flex-col items-center text-center justify-center min-h-[260px] md:min-h-[300px]">
+              <Loader2 className="w-10 h-10 md:w-12 md:h-12 text-[#3E3B7A] animate-spin mb-4 md:mb-6" />
+              <span className="text-[#3E3B7A] font-black text-xl md:text-2xl mb-2 leading-tight">
                 Aguardando o Professor
               </span>
-              <p className="text-[#3E3B7A]/60 font-medium text-sm px-4 mb-8">
+              <p className="text-[#3E3B7A]/60 font-medium text-xs md:text-sm px-2 mb-6 md:mb-8">
                 O jogo começará assim que o organizador iniciar a partida.
               </p>
 
@@ -185,9 +187,9 @@ export const StudentWaitRoom: React.FC = () => {
                 type="button"
                 onClick={handleSairDaSala}
                 disabled={isLeaving}
-                className="w-full flex items-center justify-center gap-2 bg-red-500 hover:bg-red-600 text-white py-4 px-6 rounded-2xl font-black transition-all active:scale-95 disabled:opacity-50 uppercase tracking-wider text-sm shadow-md"
+                className="w-full flex items-center justify-center gap-2 bg-red-500 hover:bg-red-600 text-white py-3.5 px-6 rounded-xl md:rounded-2xl font-black transition-all active:scale-95 disabled:opacity-50 uppercase tracking-wider text-xs md:text-sm shadow-md"
               >
-                <LogOut className="w-5 h-5" />
+                <LogOut className="w-4 h-4 md:w-5 h-5" />
                 {isLeaving ? "Saindo..." : "Sair da Sala"}
               </button>
             </div>

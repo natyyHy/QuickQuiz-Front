@@ -42,9 +42,7 @@ export const QuizQuestions: React.FC = () => {
     quizInicial?.indexQuestaoAtual || 0,
   );
   const [tempo, setTempo] = useState(quizInicial?.tempoPorQuestao || 30);
-  const [tempoTotalQuestao, setTempoTotalQuestao] = useState(
-    quizInicial?.tempoPorQuestao || 30,
-  );
+  const [tempoTotalQuestao] = useState(quizInicial?.tempoPorQuestao || 30);
 
   const [selecionada, setSelecionada] = useState<string | null>(null);
   const [respondido, setRespondido] = useState(false);
@@ -199,19 +197,20 @@ export const QuizQuestions: React.FC = () => {
         onClose={() => setToastMessage(null)}
       />
 
-      <div className="flex flex-col items-center px-4 pt-28 pb-12 md:py-16 min-h-[calc(100vh-80px)] w-full max-w-7xl mx-auto justify-start md:justify-center">
-        <div className="w-full max-w-4xl flex items-center justify-between gap-4 mb-6 md:mb-8 mt-4 md:mt-0">
-          <div className="flex flex-col sm:flex-row sm:items-center gap-2">
-            <div className="bg-white/10 text-white font-bold px-4 py-2 rounded-full border border-white/10 text-xs uppercase tracking-wider whitespace-nowrap w-fit">
+      <div className="flex flex-col items-center px-4 pt-24 pb-12 md:py-16 min-h-[calc(100vh-80px)] w-full max-w-7xl mx-auto justify-start md:justify-center">
+        <div className="w-full max-w-4xl flex flex-row items-center justify-between gap-3 mb-6 md:mb-8">
+          <div className="flex flex-col sm:flex-row sm:items-center gap-1.5 md:gap-2">
+            <div className="bg-white/10 text-white font-bold px-3 py-1.5 md:px-4 md:py-2 rounded-full border border-white/10 text-[10px] md:text-xs uppercase tracking-wider whitespace-nowrap w-fit">
               Nível: {questaoAtual.nivel}
             </div>
-            <div className="bg-white/5 text-white/60 font-bold px-4 py-2 rounded-full border border-white/5 text-xs tracking-wider whitespace-nowrap w-fit">
+            <div className="bg-white/5 text-white/60 font-bold px-3 py-1.5 md:px-4 md:py-2 rounded-full border border-white/5 text-[10px] md:text-xs tracking-wider whitespace-nowrap w-fit">
               Questão {indexQuestaoAtual + 1} de {questoesLista.length}
             </div>
           </div>
-          <div className="flex items-center gap-2 md:gap-3 bg-[#3E3B7A] border border-white/10 rounded-2xl px-4 py-2 md:px-6 md:py-3 text-white font-black text-lg md:text-xl shadow-xl">
+
+          <div className="flex items-center gap-1.5 md:gap-3 bg-[#3E3B7A] border border-white/10 rounded-xl md:rounded-2xl px-3 py-1.5 md:px-6 md:py-3 text-white font-black text-base md:text-xl shadow-xl shrink-0">
             <Timer
-              className={`w-5 h-5 md:w-6 md:h-6 ${tempo <= 10 ? "text-red-400 animate-pulse" : "text-blue-400"}`}
+              className={`w-4 h-4 md:w-6 md:h-6 ${tempo <= 10 ? "text-red-400 animate-pulse" : "text-blue-400"}`}
             />
             <span className={tempo <= 10 ? "text-red-400" : "text-white"}>
               {tempo}s
@@ -219,14 +218,14 @@ export const QuizQuestions: React.FC = () => {
           </div>
         </div>
 
-        <div className="w-full max-w-4xl bg-[#3E3B7A] rounded-[2rem] md:rounded-[2.5rem] p-6 md:p-12 border border-white/10 shadow-2xl space-y-6 md:space-y-8">
-          <div className="text-center space-y-6 flex flex-col items-center justify-center">
+        <div className="w-full max-w-4xl bg-[#3E3B7A] rounded-[2rem] md:rounded-[2.5rem] p-5 sm:p-8 md:p-12 border border-white/10 shadow-2xl space-y-6 md:space-y-8">
+          <div className="text-center space-y-4 md:space-y-6 flex flex-col items-center justify-center">
             <h1 className="text-xl md:text-3xl lg:text-4xl font-black text-white leading-tight max-w-3xl w-full break-words">
               {questaoAtual.pergunta}
             </h1>
 
             {questaoAtual.imagem && (
-              <div className="w-full max-w-md aspect-video rounded-2xl md:rounded-3xl overflow-hidden border-4 border-white/10 shadow-xl dynamic-image-container">
+              <div className="w-full max-w-md aspect-video rounded-xl md:rounded-3xl overflow-hidden border-2 md:border-4 border-white/10 shadow-xl dynamic-image-container">
                 <img
                   src={questaoAtual.imagem}
                   alt="Quiz visual element"
@@ -260,13 +259,13 @@ export const QuizQuestions: React.FC = () => {
                   key={key}
                   disabled={respondido || aguardandoProxima}
                   onClick={() => handleResponder(key)}
-                  className={`flex items-center justify-between border-2 rounded-xl md:rounded-2xl p-4 md:p-6 text-left font-bold text-base md:text-lg transition-all gap-4 min-w-0 w-full ${cardStyle}`}
+                  className={`flex items-center justify-between border-2 rounded-xl md:rounded-2xl p-4 md:p-6 text-left font-bold text-sm md:text-lg transition-all gap-3 md:gap-4 min-w-0 w-full ${cardStyle}`}
                 >
                   <div className="flex items-center gap-3 md:gap-4 min-w-0 flex-1">
-                    <span className="w-8 h-8 rounded-lg md:rounded-xl bg-white/10 flex items-center justify-center text-sm shrink-0 uppercase text-white font-black">
+                    <span className="w-7 h-7 md:w-8 md:h-8 rounded-lg md:rounded-xl bg-white/10 flex items-center justify-center text-xs md:text-sm shrink-0 uppercase text-white font-black">
                       {key}
                     </span>
-                    <span className="block break-words overflow-hidden text-ellipsis w-full">
+                    <span className="block break-words overflow-hidden text-ellipsis w-full leading-snug">
                       {value}
                     </span>
                   </div>
@@ -285,8 +284,8 @@ export const QuizQuestions: React.FC = () => {
           </div>
 
           {aguardandoProxima && (
-            <div className="flex items-center justify-center gap-3 bg-white/5 border border-white/10 p-4 rounded-xl md:rounded-2xl text-white/80 font-bold text-center animate-fade-in mt-4">
-              <Loader2 className="w-5 h-5 animate-spin text-blue-400" />
+            <div className="flex items-center justify-center gap-3 bg-white/5 border border-white/10 p-3.5 rounded-xl md:rounded-2xl text-white/80 font-bold text-center text-sm md:text-base animate-fade-in mt-4">
+              <Loader2 className="w-4 h-4 md:w-5 md:h-5 animate-spin text-blue-400" />
               <span>Indo para a próxima questão...</span>
             </div>
           )}
