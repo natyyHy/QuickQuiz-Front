@@ -111,7 +111,7 @@ export const QuizRoom: React.FC = () => {
       />
 
       <div className="flex flex-col items-center px-4 py-8 md:py-20 min-h-[calc(100vh-80px)] w-full max-w-4xl mx-auto">
-        <div className="w-full flex items-center justify-start mb-6 md:mb-12">
+        <div className="w-full flex items-center justify-start mt-12 mb-6 md:mb-12">
           <button
             type="button"
             onClick={handleVoltar}

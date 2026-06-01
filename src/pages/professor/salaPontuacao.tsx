@@ -67,7 +67,7 @@ export const QuizScores: React.FC = () => {
           <button
             type="button"
             onClick={handleVoltar}
-            className="flex items-center gap-2 text-white/60 hover:text-white transition-colors font-bold group self-start sm:self-auto"
+            className="flex items-center gap-2 mt-12 text-white/60 hover:text-white transition-colors font-bold group self-start sm:self-auto"
           >
             <ArrowLeft className="w-5 h-5 group-hover:-translate-x-1 transition-transform" />
             <span>Voltar ao Painel</span>
